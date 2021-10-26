@@ -48,6 +48,7 @@ Oscil <PHASOR256_NUM_CELLS, AUDIO_RATE> aPha2(PHASOR256_DATA);
 int freq1 = 110;//base freq
 int freq2 = 110;//base freq
 int voct = 1000;//external V/OCT LSB
+int voct2 = 1000; //external V/OCT2 LSB
 
 int freqv1 = 440;//apply voct
 int freqv2 = 440;
@@ -299,8 +300,11 @@ void updateControl() {
 
 
 
-  //OSC frequency knob
+ //frequency setting
+ voct = mozziAnalogRead(4); //Wave 1 V/Oct
+ voct2 = mozziAnalogRead(5); //Wave 2 V/Oct
 
+//Independent oscillators or unison oscillators mode
 
 unisw = digitalRead(7);
 
@@ -308,6 +312,11 @@ if (unisw == 0) //Independent
 {
   freq1 = mozziAnalogRead(0) / 4 ; //Frequency pot = A0
   freq2 = mozziAnalogRead(1) / 4 ; //Frequency pot = A1
+
+  
+ freqv1 = freq1 * pow(2, (pgm_read_float(&(voctpow[voct])))); // V/oct apply
+ freqv2 = freq2 * pow(2, (pgm_read_float(&(voctpow[voct2])))); // V/oct apply
+  
   
 }
 
@@ -316,6 +325,9 @@ else if (unisw ==1) //Unison
 
   freq1 = mozziAnalogRead(0) / 4 ; //Frequency pot = A0
   freq2 = mozziAnalogRead(0) / 4 ; //Frequency pot = A0
+
+ freqv1 = freq1 * pow(2, (pgm_read_float(&(voctpow[voct])))); // V/oct apply
+ freqv2 = freq2 * pow(2, (pgm_read_float(&(voctpow[voct])))); // V/oct apply
   
 }
 
@@ -323,17 +335,69 @@ else if (unisw ==1) //Unison
 
 
 
- //frequency setting
- voct = mozziAnalogRead(4);
- 
+
+
+
+
  //    voct = overSampler.next(voct)*2; //if need more resolution 
- freqv1 = freq1 * pow(2, (pgm_read_float(&(voctpow[voct])))); // V/oct apply
- freqv2 = freq2 * pow(2, (pgm_read_float(&(voctpow[voct])))); // V/oct apply
 
 
+
+
+//Wave select - ALL POSSIBLE WAVE COMBOS AVAILABLE!
   switch (wave) {
+
+
+    case 0: //Saw + x
+    switch(wave2) {
+      
+    
     case 0://saw
       aSaw1.setFreq(freqv1); // set the frequency
+      aSaw2.setFreq(freqv2);
+      break;
+
+    case 1://squ
+      aSaw1.setFreq(freqv1); // set the frequency
+      aSqu2.setFreq(freqv2);
+      break;
+
+    case 2://tri
+      aSaw1.setFreq(freqv1); // set the frequency
+      aTri2.setFreq(freqv2);
+      break;
+
+    case 3://sin
+      aSaw1.setFreq(freqv1); // set the frequency
+      aSin2.setFreq(freqv2);
+      break;
+
+    case 4://Chebychev
+      aSaw1.setFreq(freqv1); // set the frequency
+      aChb2.setFreq(freqv2);
+      break;
+
+    case 5://Half sin
+      aSaw1.setFreq(freqv1); // set the frequency
+      ahSin2.setFreq(freqv2);
+      break;
+
+    case 6:// Sigmoid
+      aSaw1.setFreq(freqv1); // set the frequency
+      aSig2.setFreq(freqv2);
+      break;
+
+    case 7:// Phasor
+      aSaw1.setFreq(freqv1); // set the frequency
+      aPha2.setFreq(freqv2);
+      break;
+  }
+
+  case 1: //Square + x
+  switch(wave2) {
+    
+    case 0://saw
+      aSqu1.setFreq(freqv1); // set the frequency
       aSaw2.setFreq(freqv2);
       break;
 
@@ -343,46 +407,48 @@ else if (unisw ==1) //Unison
       break;
 
     case 2://tri
-      aTri1.setFreq(freqv1); // set the frequency
+      aSqu1.setFreq(freqv1); // set the frequency
       aTri2.setFreq(freqv2);
       break;
 
     case 3://sin
-      aSin1.setFreq(freqv1); // set the frequency
+      aSqu1.setFreq(freqv1); // set the frequency
       aSin2.setFreq(freqv2);
       break;
 
     case 4://Chebychev
-      aChb1.setFreq(freqv1); // set the frequency
+      aSqu1.setFreq(freqv1); // set the frequency
       aChb2.setFreq(freqv2);
       break;
 
     case 5://Half sin
-      ahSin1.setFreq(freqv1); // set the frequency
+      aSqu1.setFreq(freqv1); // set the frequency
       ahSin2.setFreq(freqv2);
       break;
 
     case 6:// Sigmoid
-      aSig1.setFreq(freqv1); // set the frequency
+      aSqu1.setFreq(freqv1); // set the frequency
       aSig2.setFreq(freqv2);
       break;
 
     case 7:// Phasor
-      aPha1.setFreq(freqv1); // set the frequency
+      aSqu1.setFreq(freqv1); // set the frequency
       aPha2.setFreq(freqv2);
       break;
+  
   }
 
+   case 2: //Triangle + x
 
+   switch(wave2) {
 
-    switch (wave2) {
     case 0://saw
-      aSaw1.setFreq(freqv1); // set the frequency
+      aTri1.setFreq(freqv1); // set the frequency
       aSaw2.setFreq(freqv2);
       break;
 
     case 1://squ
-      aSqu1.setFreq(freqv1); // set the frequency
+      aTri1.setFreq(freqv1); // set the frequency
       aSqu2.setFreq(freqv2);
       break;
 
@@ -392,7 +458,99 @@ else if (unisw ==1) //Unison
       break;
 
     case 3://sin
+      aTri1.setFreq(freqv1); // set the frequency
+      aSin2.setFreq(freqv2);
+      break;
+
+    case 4://Chebychev
+      aTri1.setFreq(freqv1); // set the frequency
+      aChb2.setFreq(freqv2);
+      break;
+
+    case 5://Half sin
+      aTri1.setFreq(freqv1); // set the frequency
+      ahSin2.setFreq(freqv2);
+      break;
+
+    case 6:// Sigmoid
+      aTri1.setFreq(freqv1); // set the frequency
+      aSig2.setFreq(freqv2);
+      break;
+
+    case 7:// Phasor
+      aTri1.setFreq(freqv1); // set the frequency
+      aPha2.setFreq(freqv2);
+      break;
+    
+   }
+
+   case 3: //Sin + x
+
+   switch (wave2) {
+
+    case 0://saw
       aSin1.setFreq(freqv1); // set the frequency
+      aSaw2.setFreq(freqv2);
+      break;
+
+    case 1://squ
+      aSin1.setFreq(freqv1); // set the frequency
+      aSqu2.setFreq(freqv2);
+      break;
+
+    case 2://tri
+      aSin1.setFreq(freqv1); // set the frequency
+      aTri2.setFreq(freqv2);
+      break;
+
+    case 3://sin
+      aSin1.setFreq(freqv1); // set the frequency
+      aSin2.setFreq(freqv2);
+      break;
+
+    case 4://Chebychev
+      aSin1.setFreq(freqv1); // set the frequency
+      aChb2.setFreq(freqv2);
+      break;
+
+    case 5://Half sin
+      aSin1.setFreq(freqv1); // set the frequency
+      ahSin2.setFreq(freqv2);
+      break;
+
+    case 6:// Sigmoid
+      aSin1.setFreq(freqv1); // set the frequency
+      aSig2.setFreq(freqv2);
+      break;
+
+    case 7:// Phasor
+      aSin1.setFreq(freqv1); // set the frequency
+      aPha2.setFreq(freqv2);
+      break;
+    
+   }
+
+   case 4: //Chebychev + x
+
+   switch(wave2) { 
+
+    case 0://saw
+      aChb1.setFreq(freqv1); // set the frequency
+      aSaw2.setFreq(freqv2);
+      break;
+
+    case 1://squ
+      aChb1.setFreq(freqv1); // set the frequency
+      aSqu2.setFreq(freqv2);
+      break;
+
+    case 2://tri
+      aChb1.setFreq(freqv1); // set the frequency
+      aTri2.setFreq(freqv2);
+      break;
+
+    case 3://sin
+      aChb1.setFreq(freqv1); // set the frequency
       aSin2.setFreq(freqv2);
       break;
 
@@ -402,7 +560,99 @@ else if (unisw ==1) //Unison
       break;
 
     case 5://Half sin
+      aChb1.setFreq(freqv1); // set the frequency
+      ahSin2.setFreq(freqv2);
+      break;
+
+    case 6:// Sigmoid
+      aChb1.setFreq(freqv1); // set the frequency
+      aSig2.setFreq(freqv2);
+      break;
+
+    case 7:// Phasor
+      aChb1.setFreq(freqv1); // set the frequency
+      aPha2.setFreq(freqv2);
+      break;
+  
+   }
+
+   case 5: //Half Sin + x
+
+   switch(wave2) { 
+
+    case 0://saw
       ahSin1.setFreq(freqv1); // set the frequency
+      aSaw2.setFreq(freqv2);
+      break;
+
+    case 1://squ
+     ahSin1.setFreq(freqv1); // set the frequency
+      aSqu2.setFreq(freqv2);
+      break;
+
+    case 2://tri
+      ahSin1.setFreq(freqv1); // set the frequency
+      aTri2.setFreq(freqv2);
+      break;
+
+    case 3://sin
+     ahSin1.setFreq(freqv1); // set the frequency
+      aSin2.setFreq(freqv2);
+      break;
+
+    case 4://Chebychev
+      ahSin1.setFreq(freqv1); // set the frequency
+      aChb2.setFreq(freqv2);
+      break;
+
+    case 5://Half sin
+     ahSin1.setFreq(freqv1); // set the frequency
+      ahSin2.setFreq(freqv2);
+      break;
+
+    case 6:// Sigmoid
+      ahSin1.setFreq(freqv1); // set the frequency
+      aSig2.setFreq(freqv2);
+      break;
+
+    case 7:// Phasor
+      ahSin1.setFreq(freqv1); // set the frequency
+      aPha2.setFreq(freqv2);
+      break;
+  
+   }
+
+   case 6: //Sigmoid + x
+
+   switch(wave2) { 
+
+    case 0://saw
+      aSig1.setFreq(freqv1); // set the frequency
+      aSaw2.setFreq(freqv2);
+      break;
+
+    case 1://squ
+     aSig1.setFreq(freqv1); // set the frequency
+      aSqu2.setFreq(freqv2);
+      break;
+
+    case 2://tri
+      aSig1.setFreq(freqv1); // set the frequency
+      aTri2.setFreq(freqv2);
+      break;
+
+    case 3://sin
+     aSig1.setFreq(freqv1); // set the frequency
+      aSin2.setFreq(freqv2);
+      break;
+
+    case 4://Chebychev
+      aSig1.setFreq(freqv1); // set the frequency
+      aChb2.setFreq(freqv2);
+      break;
+
+    case 5://Half sin
+    aSig1.setFreq(freqv1); // set the frequency
       ahSin2.setFreq(freqv2);
       break;
 
@@ -412,12 +662,61 @@ else if (unisw ==1) //Unison
       break;
 
     case 7:// Phasor
+      aSig1.setFreq(freqv1); // set the frequency
+      aPha2.setFreq(freqv2);
+      break;
+  
+   }
+
+
+   case 7: //Phasor + x
+
+   switch(wave2) { 
+
+    case 0://saw
+      aPha1.setFreq(freqv1); // set the frequency
+      aSaw2.setFreq(freqv2);
+      break;
+
+    case 1://squ
+     aPha1.setFreq(freqv1); // set the frequency
+      aSqu2.setFreq(freqv2);
+      break;
+
+    case 2://tri
+      aPha1.setFreq(freqv1); // set the frequency
+      aTri2.setFreq(freqv2);
+      break;
+
+    case 3://sin
+     aPha1.setFreq(freqv1); // set the frequency
+      aSin2.setFreq(freqv2);
+      break;
+
+    case 4://Chebychev
+      aPha1.setFreq(freqv1); // set the frequency
+      aChb2.setFreq(freqv2);
+      break;
+
+    case 5://Half sin
+    aPha1.setFreq(freqv1); // set the frequency
+      ahSin2.setFreq(freqv2);
+      break;
+
+    case 6:// Sigmoid
+      aPha1.setFreq(freqv1); // set the frequency
+      aSig2.setFreq(freqv2);
+      break;
+
+    case 7:// Phasor
       aPha1.setFreq(freqv1); // set the frequency
       aPha2.setFreq(freqv2);
       break;
+  
+   }
+
+
   }
-
-
 
 
 }
@@ -425,8 +724,49 @@ else if (unisw ==1) //Unison
 int updateAudio() {
   switch (wave) {
 
+    case 0: //Saw + x
+    switch (wave2) {
+
     case 0:
       return MonoOutput::from8Bit(aSaw1.next() / 32 + aSaw2.next() / 32);
+      break;
+
+    case 1:
+      return MonoOutput::from8Bit(aSaw1.next() / 32 + aSqu2.next() / 32);
+      break;
+
+    case 2:
+      return MonoOutput::from8Bit(aSaw1.next() / 32 + aTri2.next() / 32);
+      break;
+
+    case 3:
+      return MonoOutput::from8Bit(aSaw1.next() / 32 + aSin2.next() / 32);
+      break;
+
+    case 4:
+      return MonoOutput::from8Bit(aSaw1.next() / 32 + aChb2.next() / 32);
+      break;
+
+    case 5:
+      return MonoOutput::from8Bit(aSaw1.next() / 32 + ahSin2.next() / 32);
+      break;
+
+    case 6:
+      return MonoOutput::from8Bit(aSaw1.next() / 32 + aSig2.next() / 32);
+      break;
+
+    case 7:
+      return MonoOutput::from8Bit(aSaw1.next() / 32 + aPha2.next() / 32);
+      break;
+    
+    }
+
+
+    case 1: //Square + x
+    switch (wave2) {
+
+    case 0:
+      return MonoOutput::from8Bit(aSqu1.next() / 32 + aSaw2.next() / 32);
       break;
 
     case 1:
@@ -434,39 +774,40 @@ int updateAudio() {
       break;
 
     case 2:
-      return MonoOutput::from8Bit(aTri1.next() / 32 + aTri2.next() / 32);
+      return MonoOutput::from8Bit(aSqu1.next() / 32 + aTri2.next() / 32);
       break;
 
     case 3:
-      return MonoOutput::from8Bit(aSin1.next() / 32 + aSin2.next() / 32);
+      return MonoOutput::from8Bit(aSqu1.next() / 32 + aSin2.next() / 32);
       break;
 
     case 4:
-      return MonoOutput::from8Bit(aChb1.next() / 32 + aChb2.next() / 32);
+      return MonoOutput::from8Bit(aSqu1.next() / 32 + aChb2.next() / 32);
       break;
 
     case 5:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 + ahSin2.next() / 32);
+      return MonoOutput::from8Bit(aSqu1.next() / 32 + ahSin2.next() / 32);
       break;
 
     case 6:
-      return MonoOutput::from8Bit(aSig1.next() / 32 + aSig2.next() / 32);
+      return MonoOutput::from8Bit(aSqu1.next() / 32 + aSig2.next() / 32);
       break;
 
     case 7:
-      return MonoOutput::from8Bit(aPha1.next() / 32 + aPha2.next() / 32);
+      return MonoOutput::from8Bit(aSqu1.next() / 32 + aPha2.next() / 32);
       break;
+    
+    }
 
-  }
-
-  switch (wave2) {
+    case 2: //Triangle + x
+    switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 + aSaw2.next() / 32);
+      return MonoOutput::from8Bit(aTri1.next() / 32 + aSaw2.next() / 32);
       break;
 
     case 1:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 + aSqu2.next() / 32);
+      return MonoOutput::from8Bit(aTri1.next() / 32 + aSqu2.next() / 32);
       break;
 
     case 2:
@@ -474,7 +815,81 @@ int updateAudio() {
       break;
 
     case 3:
+      return MonoOutput::from8Bit(aTri1.next() / 32 + aSin2.next() / 32);
+      break;
+
+    case 4:
+      return MonoOutput::from8Bit(aTri1.next() / 32 + aChb2.next() / 32);
+      break;
+
+    case 5:
+      return MonoOutput::from8Bit(aTri1.next() / 32 + ahSin2.next() / 32);
+      break;
+
+    case 6:
+      return MonoOutput::from8Bit(aTri1.next() / 32 + aSig2.next() / 32);
+      break;
+
+    case 7:
+      return MonoOutput::from8Bit(aTri1.next() / 32 + aPha2.next() / 32);
+      break;
+    
+    }
+
+    case 3: //Sin + x
+    switch (wave2) {
+
+    case 0:
+      return MonoOutput::from8Bit(aSin1.next() / 32 + aSaw2.next() / 32);
+      break;
+
+    case 1:
+      return MonoOutput::from8Bit(aSin1.next() / 32 + aSqu2.next() / 32);
+      break;
+
+    case 2:
+      return MonoOutput::from8Bit(aSin1.next() / 32 + aTri2.next() / 32);
+      break;
+
+    case 3:
       return MonoOutput::from8Bit(aSin1.next() / 32 + aSin2.next() / 32);
+      break;
+
+    case 4:
+      return MonoOutput::from8Bit(aSin1.next() / 32 + aChb2.next() / 32);
+      break;
+
+    case 5:
+      return MonoOutput::from8Bit(aSin1.next() / 32 + ahSin2.next() / 32);
+      break;
+
+    case 6:
+      return MonoOutput::from8Bit(aSin1.next() / 32 + aSig2.next() / 32);
+      break;
+
+    case 7:
+      return MonoOutput::from8Bit(aSin1.next() / 32 + aPha2.next() / 32);
+      break;
+    
+    }
+
+    case 4: //Chebychev + x
+    switch (wave2) {
+
+    case 0:
+      return MonoOutput::from8Bit(aChb1.next() / 32 + aSaw2.next() / 32);
+      break;
+
+    case 1:
+      return MonoOutput::from8Bit(aChb1.next() / 32 + aSqu2.next() / 32);
+      break;
+
+    case 2:
+      return MonoOutput::from8Bit(aChb1.next() / 32 + aTri2.next() / 32);
+      break;
+
+    case 3:
+      return MonoOutput::from8Bit(aChb1.next() / 32 + aSin2.next() / 32);
       break;
 
     case 4:
@@ -482,7 +897,85 @@ int updateAudio() {
       break;
 
     case 5:
+      return MonoOutput::from8Bit(aChb1.next() / 32 + ahSin2.next() / 32);
+      break;
+
+    case 6:
+      return MonoOutput::from8Bit(aChb1.next() / 32 + aSig2.next() / 32);
+      break;
+
+    case 7:
+      return MonoOutput::from8Bit(aChb1.next() / 32 + aPha2.next() / 32);
+      break;
+    
+    }
+
+
+
+    
+    case 5: //Half sin + x
+    switch (wave2) {
+
+    case 0:
+      return MonoOutput::from8Bit(ahSin1.next() / 32 + aSaw2.next() / 32);
+      break;
+
+    case 1:
+      return MonoOutput::from8Bit(ahSin1.next() / 32 + aSqu2.next() / 32);
+      break;
+
+    case 2:
+      return MonoOutput::from8Bit(ahSin1.next() / 32 + aTri2.next() / 32);
+      break;
+
+    case 3:
+      return MonoOutput::from8Bit(ahSin1.next() / 32 + aSin2.next() / 32);
+      break;
+
+    case 4:
+      return MonoOutput::from8Bit(ahSin1.next() / 32 + aChb2.next() / 32);
+      break;
+
+    case 5:
       return MonoOutput::from8Bit(ahSin1.next() / 32 + ahSin2.next() / 32);
+      break;
+
+    case 6:
+      return MonoOutput::from8Bit(ahSin1.next() / 32 + aSig2.next() / 32);
+      break;
+
+    case 7:
+      return MonoOutput::from8Bit(ahSin1.next() / 32 + aPha2.next() / 32);
+      break;
+    
+    }
+
+
+    case 6: //Sigmoid + x
+    switch (wave2) {
+
+    case 0:
+      return MonoOutput::from8Bit(aSig1.next() / 32 + aSaw2.next() / 32);
+      break;
+
+    case 1:
+      return MonoOutput::from8Bit(aSig1.next() / 32 + aSqu2.next() / 32);
+      break;
+
+    case 2:
+      return MonoOutput::from8Bit(aSig1.next() / 32 + aTri2.next() / 32);
+      break;
+
+    case 3:
+      return MonoOutput::from8Bit(aSig1.next() / 32 + aSin2.next() / 32);
+      break;
+
+    case 4:
+      return MonoOutput::from8Bit(aSig1.next() / 32 + aChb2.next() / 32);
+      break;
+
+    case 5:
+      return MonoOutput::from8Bit(aSig1.next() / 32 + ahSin2.next() / 32);
       break;
 
     case 6:
@@ -490,15 +983,54 @@ int updateAudio() {
       break;
 
     case 7:
+      return MonoOutput::from8Bit(aSig1.next() / 32 + aPha2.next() / 32);
+      break;
+    
+    }
+
+
+    case 7: //Phasor + x
+    switch (wave2) {
+
+    case 0:
+      return MonoOutput::from8Bit(aPha1.next() / 32 + aSaw2.next() / 32);
+      break;
+
+    case 1:
+      return MonoOutput::from8Bit(aPha1.next() / 32 + aSqu2.next() / 32);
+      break;
+
+    case 2:
+      return MonoOutput::from8Bit(aPha1.next() / 32 + aTri2.next() / 32);
+      break;
+
+    case 3:
+      return MonoOutput::from8Bit(aPha1.next() / 32 + aSin2.next() / 32);
+      break;
+
+    case 4:
+      return MonoOutput::from8Bit(aPha1.next() / 32 + aChb2.next() / 32);
+      break;
+
+    case 5:
+      return MonoOutput::from8Bit(aPha1.next() / 32 + ahSin2.next() / 32);
+      break;
+
+    case 6:
+      return MonoOutput::from8Bit(aPha1.next() / 32 + aSig2.next() / 32);
+      break;
+
+    case 7:
       return MonoOutput::from8Bit(aPha1.next() / 32 + aPha2.next() / 32);
       break;
+    
+    }
 
   }
 
-
-
-  
 }
+
+
 void loop() {
   audioHook(); // required here
 }
