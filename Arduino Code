@@ -16,29 +16,23 @@
 Oscil <SAW2048_NUM_CELLS, AUDIO_RATE> aSaw1(SAW2048_DATA);
 Oscil <SAW2048_NUM_CELLS, AUDIO_RATE> aSaw2(SAW2048_DATA);
 
-
 Oscil <SQUARE_NO_ALIAS512_NUM_CELLS, AUDIO_RATE> aSqu1(SQUARE_NO_ALIAS512_DATA);
 Oscil <SQUARE_NO_ALIAS512_NUM_CELLS, AUDIO_RATE> aSqu2(SQUARE_NO_ALIAS512_DATA);
 
 Oscil <TRIANGLE_HERMES_2048_NUM_CELLS, AUDIO_RATE> aTri1(TRIANGLE_HERMES_2048_DATA);
 Oscil <TRIANGLE_HERMES_2048_NUM_CELLS, AUDIO_RATE> aTri2(TRIANGLE_HERMES_2048_DATA);
 
-
 Oscil <SIN2048_NUM_CELLS, AUDIO_RATE> aSin1(SIN2048_DATA);
 Oscil <SIN2048_NUM_CELLS, AUDIO_RATE> aSin2(SIN2048_DATA);
-
 
 Oscil <CHEBYSHEV_3RD_256_NUM_CELLS, AUDIO_RATE> aChb1(CHEBYSHEV_3RD_256_DATA);
 Oscil <CHEBYSHEV_3RD_256_NUM_CELLS, AUDIO_RATE> aChb2(CHEBYSHEV_3RD_256_DATA);
 
-
 Oscil <HALFSIN256_NUM_CELLS, AUDIO_RATE> ahSin1(HALFSIN256_DATA);
 Oscil <HALFSIN256_NUM_CELLS, AUDIO_RATE> ahSin2(HALFSIN256_DATA);
 
-
 Oscil <WAVESHAPE_SIGMOID_NUM_CELLS, AUDIO_RATE> aSig1(WAVESHAPE_SIGMOID_DATA);
 Oscil <WAVESHAPE_SIGMOID_NUM_CELLS, AUDIO_RATE> aSig2(WAVESHAPE_SIGMOID_DATA);
-
 
 Oscil <PHASOR256_NUM_CELLS, AUDIO_RATE> aPha1(PHASOR256_DATA);
 Oscil <PHASOR256_NUM_CELLS, AUDIO_RATE> aPha2(PHASOR256_DATA);
@@ -339,17 +333,17 @@ else if (unisw ==1) //Unison
 }
 
  gain1 = (mozziAnalogRead(5) / 4);
- gain1 = constrain(gain1, 0, 128);
+// gain1 = constrain(gain1, 0, 256);
 
- gain2 = 128 - gain1;
-
-
+ gain2 = 1023 - gain1;
 
 
 
 
 
- //    voct = overSampler.next(voct)*2; //if need more resolution 
+
+
+//     voct = overSampler.next(voct)*2; //if need more resolution 
 
 
 
@@ -738,35 +732,35 @@ int updateAudio() {
     switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 * gain1 / 128  + aSaw2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSaw1.next() / 32 * gain1 / 128)  + (aSaw2.next() / 32 * gain2 / 128));
       break;
 
     case 1:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 * gain1 / 128 + aSqu2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSaw1.next() / 32 * gain1 / 128) + (aSqu2.next() / 32 * gain2 / 128));
       break;
 
     case 2:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 * gain1 / 128 + aTri2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSaw1.next() / 32 * gain1 / 128) + (aTri2.next() / 32 * gain2 / 128));
       break;
 
     case 3:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 * gain1 / 128 + aSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSaw1.next() / 32 * gain1 / 128) + (aSin2.next() / 32 * gain2 / 128));
       break;
 
     case 4:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 * gain1 / 128 + aChb2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSaw1.next() / 32 * gain1 / 128) + (aChb2.next() / 32 * gain2 / 128));
       break;
 
     case 5:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 * gain1 / 128 + ahSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSaw1.next() / 32 * gain1 / 128) + (ahSin2.next() / 32 * gain2 / 128));
       break;
 
     case 6:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 * gain1 / 128 + aSig2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSaw1.next() / 32 * gain1 / 128) + (aSig2.next() / 32 * gain2 / 128));
       break;
 
     case 7:
-      return MonoOutput::from8Bit(aSaw1.next() / 32 * gain1 / 128 + aPha2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSaw1.next() / 32 * gain1 / 128) + (aPha2.next() / 32 * gain2 / 128));
       break;
     
     }
@@ -776,35 +770,35 @@ int updateAudio() {
     switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 * gain1 / 128 + aSaw2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSqu1.next() / 32 * gain1 / 128) + (aSaw2.next() / 32 * gain2 / 128));
       break;
 
     case 1:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 * gain1 / 128 + aSqu2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSqu1.next() / 32 * gain1 / 128) + (aSqu2.next() / 32 * gain2 / 128));
       break;
 
     case 2:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 * gain1 / 128 + aTri2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSqu1.next() / 32 * gain1 / 128) + (aTri2.next() / 32 * gain2 / 128));
       break;
 
     case 3:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 * gain1 / 128 + aSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSqu1.next() / 32 * gain1 / 128) + (aSin2.next() / 32 * gain2 / 128));
       break;
 
     case 4:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 * gain1 / 128 + aChb2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSqu1.next() / 32 * gain1 / 128) + (aChb2.next() / 32 * gain2 / 128));
       break;
 
     case 5:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 * gain1 / 128 + ahSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSqu1.next() / 32 * gain1 / 128) + (ahSin2.next() / 32 * gain2 / 128));
       break;
 
     case 6:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 * gain1 / 128 + aSig2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSqu1.next() / 32 * gain1 / 128) + (aSig2.next() / 32 * gain2 / 128));
       break;
 
     case 7:
-      return MonoOutput::from8Bit(aSqu1.next() / 32 * gain1 / 128 + aPha2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSqu1.next() / 32 * gain1 / 128) + (aPha2.next() / 32 * gain2 / 128));
       break;
     
     }
@@ -813,35 +807,35 @@ int updateAudio() {
     switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(aTri1.next() / 32 * gain1 / 128 + aSaw2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aTri1.next() / 32 * gain1 / 128) + (aSaw2.next() / 32 * gain2 / 128));
       break;
 
     case 1:
-      return MonoOutput::from8Bit(aTri1.next() / 32 * gain1 / 128 + aSqu2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aTri1.next() / 32 * gain1 / 128) + (aSqu2.next() / 32 * gain2 / 128));
       break;
 
     case 2:
-      return MonoOutput::from8Bit(aTri1.next() / 32 * gain1 / 128 + aTri2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aTri1.next() / 32 * gain1 / 128) + (aTri2.next() / 32 * gain2 / 128));
       break;
 
     case 3:
-      return MonoOutput::from8Bit(aTri1.next() / 32 * gain1 / 128 + aSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aTri1.next() / 32 * gain1 / 128) + (aSin2.next() / 32 * gain2 / 128));
       break;
 
     case 4:
-      return MonoOutput::from8Bit(aTri1.next() / 32 * gain1 / 128 + aChb2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aTri1.next() / 32 * gain1 / 128) + (aChb2.next() / 32 * gain2 / 128));
       break;
 
     case 5:
-      return MonoOutput::from8Bit(aTri1.next() / 32 * gain1 / 128 + ahSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aTri1.next() / 32 * gain1 / 128) + (ahSin2.next() / 32 * gain2 / 128));
       break;
 
     case 6:
-      return MonoOutput::from8Bit(aTri1.next() / 32 * gain1 / 128 + aSig2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aTri1.next() / 32 * gain1 / 128) + (aSig2.next() / 32 * gain2 / 128));
       break;
 
     case 7:
-      return MonoOutput::from8Bit(aTri1.next() / 32 * gain1 / 128 + aPha2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aTri1.next() / 32 * gain1 / 128) + (aPha2.next() / 32 * gain2 / 128));
       break;
     
     }
@@ -850,35 +844,35 @@ int updateAudio() {
     switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(aSin1.next() / 32 * gain1 / 128 + aSaw2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSin1.next() / 32 * gain1 / 128) + (aSaw2.next() / 32 * gain2 / 128));
       break;
 
     case 1:
-      return MonoOutput::from8Bit(aSin1.next() / 32 * gain1 / 128 + aSqu2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSin1.next() / 32 * gain1 / 128) + (aSqu2.next() / 32 * gain2 / 128));
       break;
 
     case 2:
-      return MonoOutput::from8Bit(aSin1.next() / 32 * gain1 / 128 + aTri2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSin1.next() / 32 * gain1 / 128) + (aTri2.next() / 32 * gain2 / 128));
       break;
 
     case 3:
-      return MonoOutput::from8Bit(aSin1.next() / 32 * gain1 / 128 + aSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSin1.next() / 32 * gain1 / 128) + (aSin2.next() / 32 * gain2 / 128));
       break;
 
     case 4:
-      return MonoOutput::from8Bit(aSin1.next() / 32 * gain1 / 128 + aChb2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSin1.next() / 32 * gain1 / 128) + (aChb2.next() / 32 * gain2 / 128));
       break;
 
     case 5:
-      return MonoOutput::from8Bit(aSin1.next() / 32 * gain1 / 128 + ahSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSin1.next() / 32 * gain1 / 128) + (ahSin2.next() / 32 * gain2 / 128));
       break;
 
     case 6:
-      return MonoOutput::from8Bit(aSin1.next() / 32 * gain1 / 128 + aSig2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSin1.next() / 32 * gain1 / 128) + (aSig2.next() / 32 * gain2 / 128));
       break;
 
     case 7:
-      return MonoOutput::from8Bit(aSin1.next() / 32 * gain1 / 128 + aPha2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSin1.next() / 32 * gain1 / 128) + (aPha2.next() / 32 * gain2 / 128));
       break;
     
     }
@@ -887,35 +881,35 @@ int updateAudio() {
     switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(aChb1.next() / 32 * gain1 / 128 + aSaw2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aChb1.next() / 32 * gain1 / 128) + (aSaw2.next() / 32 * gain2 / 128));
       break;
 
     case 1:
-      return MonoOutput::from8Bit(aChb1.next() / 32 * gain1 / 128 + aSqu2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aChb1.next() / 32 * gain1 / 128) + (aSqu2.next() / 32 * gain2 / 128));
       break;
 
     case 2:
-      return MonoOutput::from8Bit(aChb1.next() / 32 * gain1 / 128 + aTri2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aChb1.next() / 32 * gain1 / 128) + (aTri2.next() / 32 * gain2 / 128));
       break;
 
     case 3:
-      return MonoOutput::from8Bit(aChb1.next() / 32 * gain1 / 128 + aSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aChb1.next() / 32 * gain1 / 128) + (aSin2.next() / 32 * gain2 / 128));
       break;
 
     case 4:
-      return MonoOutput::from8Bit(aChb1.next() / 32 * gain1 / 128 + aChb2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aChb1.next() / 32 * gain1 / 128) + (aChb2.next() / 32 * gain2 / 128));
       break;
 
     case 5:
-      return MonoOutput::from8Bit(aChb1.next() / 32 * gain1 / 128 + ahSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aChb1.next() / 32 * gain1 / 128) + (ahSin2.next() / 32 * gain2 / 128));
       break;
 
     case 6:
-      return MonoOutput::from8Bit(aChb1.next() / 32 * gain1 / 128 + aSig2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aChb1.next() / 32 * gain1 / 128) + (aSig2.next() / 32 * gain2 / 128));
       break;
 
     case 7:
-      return MonoOutput::from8Bit(aChb1.next() / 32 * gain1 / 128 + aPha2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aChb1.next() / 32 * gain1 / 128) + (aPha2.next() / 32 * gain2 / 128));
       break;
     
     }
@@ -927,35 +921,35 @@ int updateAudio() {
     switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 * gain1 / 128 + aSaw2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((ahSin1.next() / 32 * gain1 / 128) + (aSaw2.next() / 32 * gain2 / 128));
       break;
 
     case 1:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 * gain1 / 128 + aSqu2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((ahSin1.next() / 32 * gain1 / 128) + (aSqu2.next() / 32 * gain2 / 128));
       break;
 
     case 2:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 * gain1 / 128 + aTri2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((ahSin1.next() / 32 * gain1 / 128) + (aTri2.next() / 32 * gain2 / 128));
       break;
 
     case 3:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 * gain1 / 128 + aSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((ahSin1.next() / 32 * gain1 / 128) + (aSin2.next() / 32 * gain2 / 128));
       break;
 
     case 4:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 * gain1 / 128 + aChb2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((ahSin1.next() / 32 * gain1 / 128) + (aChb2.next() / 32 * gain2 / 128));
       break;
 
     case 5:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 * gain1 / 128 + ahSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((ahSin1.next() / 32 * gain1 / 128) + (ahSin2.next() / 32 * gain2 / 128));
       break;
 
     case 6:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 * gain1 / 128 + aSig2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((ahSin1.next() / 32 * gain1 / 128) + (aSig2.next() / 32 * gain2 / 128));
       break;
 
     case 7:
-      return MonoOutput::from8Bit(ahSin1.next() / 32 * gain1 / 128 + aPha2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((ahSin1.next() / 32 * gain1 / 128) + (aPha2.next() / 32 * gain2 / 128));
       break;
     
     }
@@ -965,35 +959,35 @@ int updateAudio() {
     switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(aSig1.next() / 32 * gain1 / 128 + aSaw2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSig1.next() / 32 * gain1 / 128) + (aSaw2.next() / 32 * gain2 / 128));
       break;
 
     case 1:
-      return MonoOutput::from8Bit(aSig1.next() / 32 * gain1 / 128 + aSqu2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSig1.next() / 32 * gain1 / 128) + (aSqu2.next() / 32 * gain2 / 128));
       break;
 
     case 2:
-      return MonoOutput::from8Bit(aSig1.next() / 32 * gain1 / 128 + aTri2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSig1.next() / 32 * gain1 / 128) + (aTri2.next() / 32 * gain2 / 128));
       break;
 
     case 3:
-      return MonoOutput::from8Bit(aSig1.next() / 32 * gain1 / 128 + aSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSig1.next() / 32 * gain1 / 128) + (aSin2.next() / 32 * gain2 / 128));
       break;
 
     case 4:
-      return MonoOutput::from8Bit(aSig1.next() / 32 * gain1 / 128 + aChb2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSig1.next() / 32 * gain1 / 128) + (aChb2.next() / 32 * gain2 / 128));
       break;
 
     case 5:
-      return MonoOutput::from8Bit(aSig1.next() / 32 * gain1 / 128 + ahSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSig1.next() / 32 * gain1 / 128) + (ahSin2.next() / 32 * gain2 / 128));
       break;
 
     case 6:
-      return MonoOutput::from8Bit(aSig1.next() / 32 * gain1 / 128 + aSig2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSig1.next() / 32 * gain1 / 128) + (aSig2.next() / 32 * gain2 / 128));
       break;
 
     case 7:
-      return MonoOutput::from8Bit(aSig1.next() / 32 * gain1 / 128 + aPha2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aSig1.next() / 32 * gain1 / 128) + (aPha2.next() / 32 * gain2 / 128));
       break;
     
     }
@@ -1003,35 +997,35 @@ int updateAudio() {
     switch (wave2) {
 
     case 0:
-      return MonoOutput::from8Bit(aPha1.next() / 32 * gain1 / 128 + aSaw2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aPha1.next() / 32 * gain1 / 128) + (aSaw2.next() / 32 * gain2 / 128));
       break;
 
     case 1:
-      return MonoOutput::from8Bit(aPha1.next() / 32 * gain1 / 128 + aSqu2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aPha1.next() / 32 * gain1 / 128) + (aSqu2.next() / 32 * gain2 / 128));
       break;
 
     case 2:
-      return MonoOutput::from8Bit(aPha1.next() / 32 * gain1 / 128 + aTri2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aPha1.next() / 32 * gain1 / 128) + (aTri2.next() / 32 * gain2 / 128));
       break;
 
     case 3:
-      return MonoOutput::from8Bit(aPha1.next() / 32 * gain1 / 128 + aSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aPha1.next() / 32 * gain1 / 128) + (aSin2.next() / 32 * gain2 / 128));
       break;
 
     case 4:
-      return MonoOutput::from8Bit(aPha1.next() / 32 * gain1 / 128 + aChb2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aPha1.next() / 32 * gain1 / 128) + (aChb2.next() / 32 * gain2 / 128));
       break;
 
     case 5:
-      return MonoOutput::from8Bit(aPha1.next() / 32 * gain1 / 128 + ahSin2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aPha1.next() / 32 * gain1 / 128) + (ahSin2.next() / 32 * gain2 / 128));
       break;
 
     case 6:
-      return MonoOutput::from8Bit(aPha1.next() / 32 * gain1 / 128 + aSig2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aPha1.next() / 32 * gain1 / 128) + (aSig2.next() / 32 * gain2 / 128));
       break;
 
     case 7:
-      return MonoOutput::from8Bit(aPha1.next() / 32 * gain1 / 128 + aPha2.next() / 32 * gain2 / 128);
+      return MonoOutput::from8Bit((aPha1.next() / 32 * gain1 / 128) + (aPha2.next() / 32 * gain2 / 128));
       break;
     
     }
